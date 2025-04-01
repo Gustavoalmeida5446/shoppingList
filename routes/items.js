@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
 })
 
 router.put('/:id', (req, res) => {
-  const id = parseInt(req.params.id)
+  const id = req.params.id
   try {
       const updatedItem = { ...ItemsRepository.getOneBy({ id }), ...req.body };
       ItemsRepository.update(id, updatedItem);
@@ -35,16 +35,18 @@ router.put('/:id', (req, res) => {
 })
 
 router.delete('/:id', async (req, res) => {
-  const id = parseInt(req.params.id)
   try {
-    await ItemsRepository.delete(id);
-    res.status(204).send();
+    const deleted = await ItemsRepository.delete(req.params.id);
+    if (deleted) {
+      return res.status(200).send('Deleted');
+    } else {
+      return res.status(404).send(`Item ${req.params.id} not found`);
+    }
   } catch (err) {
-    res.status(404).send('Item not found');
+    res.status(500).send('Error deleting item');
   }
-  res.status(500).send('Error deleting item');
-  res.status(404).send('Item not found');
 });
+
 
 
 module.exports = router;

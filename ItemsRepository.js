@@ -1,4 +1,5 @@
 const fs = require('fs');
+const {v4: uuidv4} = require('uuid');
 
 class ItemsRepository {
     constructor(filename) {
@@ -26,7 +27,7 @@ class ItemsRepository {
     }
 
     randomId() {
-        return Math.floor(1000 + Math.random() * 9000);
+        return uuidv4();
     }
 
     async update(id, attrs) {
@@ -62,8 +63,15 @@ class ItemsRepository {
     async delete(id) {
         const records = await this.getAll();
         const filteredRecords = records.filter(record => record.id !== id);
+    
+        if (filteredRecords.length === records.length) {
+            return false;
+        }
+    
         await this.writeAll(filteredRecords);
+        return true;
     }
+    
 
     async getAll() {
         return JSON.parse(
