@@ -1,38 +1,49 @@
 const express = require('express');
 const router = express.Router();
+const ItemsRepository = require('../ItemsRepository');
 
-const data = require('../data');
-
-router.get('/', (req, res) => {
-  res.json(data)
+router.get('/', async (req, res) => {
+  try {
+    const items = await ItemsRepository.getAll();
+    res.json(items);
+  } catch (err) {
+    res.status(500).send('Error getting items');
+  }
 })
 
-router.post('/', (req, res) => {
-  const newItem = { id: data.length + 1, item: req.body.item }
-  data.push(newItem)
-  res.status(201).json(newItem)
+router.post('/', async (req, res) => {
+  try {
+    const newItem = { item: req.body.item };
+    await ItemsRepository.create(newItem);
+    res.status(201).json(newItem)
+  }
+  catch (err) {
+    res.status(500).send('Error creating item');
+  }
 })
 
 router.put('/:id', (req, res) => {
   const id = parseInt(req.params.id)
-  const itemIndex = data.findIndex(item => item.id === id)
-  if (itemIndex !== -1) {
-    data[itemIndex].item = req.body.item
-    res.json(data[itemIndex])
-  } else {
-    res.status(404).send('Item not found')
-  }
+  try {
+      const updatedItem = { ...ItemsRepository.getOneBy({ id }), ...req.body };
+      ItemsRepository.update(id, updatedItem);
+      res.json(updatedItem);
+    }
+    catch (err) {
+      res.status(404).send('Item not found');
+    }
 })
 
-router.delete('/:id', (req, res) => {
-  const id = Number(req.params.id);
-  const itemIndex = data.findIndex(item => item.id === id)
-  if (itemIndex !== -1) {
-    data.splice(itemIndex, 1);
-    res.sendStatus(204);
-  } else {
+router.delete('/:id', async (req, res) => {
+  const id = parseInt(req.params.id)
+  try {
+    await ItemsRepository.delete(id);
+    res.status(204).send();
+  } catch (err) {
     res.status(404).send('Item not found');
   }
+  res.status(500).send('Error deleting item');
+  res.status(404).send('Item not found');
 });
 
 
