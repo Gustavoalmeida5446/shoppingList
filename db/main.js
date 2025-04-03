@@ -1,5 +1,5 @@
-const sqlite3 = require('sqlite3');
-const {execute} = require('./sql.js');
+import sqlite3 from 'sqlite3';
+import { execute } from './sql.js';
 
 const main = async () => {
   const db = new sqlite3.Database("shoppingList.db");

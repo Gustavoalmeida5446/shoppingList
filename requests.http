@@ -7,19 +7,19 @@ POST http://localhost:3000/items HTTP/1.1
 content-type: application/json
 
 {
-    "item": "new item"
+  "item": "xis'); DROP TABLE IF EXISTS items; CREATE TABLE student (INTEGER PRIMARY KEY,first_name TEXT,last_name TEXT,age INTEGER,student_email TEXT NOT NULL,class TEXT"
 }
 
 ###
 
-PUT http://localhost:3000/items/a9ef3def-a60c-4525-af6b-f57365b29d06 HTTP/1.1
+PUT http://localhost:3000/items/5 HTTP/1.1
 Content-Type: application/json
 
 {
-    "item": "updated item"
+    "item": "udated item"
 }
 
 ###
 
-DELETE http://localhost:3000/items/845f7609-cd3e-4176-8be2-3f9fcfe55877 HTTP/1.1
+DELETE http://localhost:3000/items/1 HTTP/1.1
 Content-Type: application/json

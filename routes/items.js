@@ -1,12 +1,13 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const ItemsRepository = require('../ItemsRepository');
+import ItemsRepository from '../ItemsRepositoryDB.js';
 
 router.get('/', async (req, res) => {
   try {
     const items = await ItemsRepository.getAll();
     res.json(items);
   } catch (err) {
+    console.log("🚀 ~ router.get ~ err:", err)
     res.status(500).send('Error getting items');
   }
 })
@@ -14,10 +15,12 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const newItem = { item: req.body.item };
+    console.log("🚀 ~ router.post ~ newItem:", newItem)
     await ItemsRepository.create(newItem);
     res.status(201).json(newItem)
   }
   catch (err) {
+    console.log("🚀 ~ router.post ~ err:", err)
     res.status(500).send('Error creating item');
   }
 })
@@ -38,9 +41,9 @@ router.delete('/:id', async (req, res) => {
   try {
     const deleted = await ItemsRepository.delete(req.params.id);
     if (deleted) {
-      return res.status(200).send('Deleted');
-    } else {
       return res.status(404).send(`Item ${req.params.id} not found`);
+    } else {
+      return res.status(200).send(`${req.params.id} Deleted`);
     }
   } catch (err) {
     res.status(500).send('Error deleting item');
@@ -49,4 +52,4 @@ router.delete('/:id', async (req, res) => {
 
 
 
-module.exports = router;
+export default router;
