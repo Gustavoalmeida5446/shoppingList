@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import ItemsRepository from '../ItemsRepositoryDB.js';
+import ItemsRepository from '../ItemsRepositoryORM.js';
 
 router.get('/', async (req, res) => {
   try {
