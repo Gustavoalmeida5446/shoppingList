@@ -13,15 +13,25 @@ class ItemsRepositoryORM {
     }
 
     async getOneBy(filters) {
-
+        const item = await prisma.items.findFirst({
+            where: filters,
+        })
+        return item
     }
 
     async update(id, attrs) {
-
+        const updated = await prisma.items.update({
+            where: { id },
+            data: attrs,
+        })
+        return updated
     }
 
     async delete(id) {
-
+        const deleted = await prisma.items.delete({
+            where: { id },
+        })
+        return deleted
     }
 
     async getAll() {

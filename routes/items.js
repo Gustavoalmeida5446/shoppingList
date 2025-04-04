@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
 })
 
 router.put('/:id', (req, res) => {
-  const id = req.params.id
+  const id = Number(req.params.id)
   try {
       const updatedItem = { ...ItemsRepository.getOneBy({ id }), ...req.body };
       ItemsRepository.update(id, updatedItem);
@@ -39,7 +39,7 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-    const deleted = await ItemsRepository.delete(req.params.id);
+    const deleted = await ItemsRepository.delete(Number(req.params.id));
     if (deleted) {
       return res.status(404).send(`Item ${req.params.id} not found`);
     } else {
