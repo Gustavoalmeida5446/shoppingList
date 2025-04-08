@@ -1,6 +1,9 @@
+import cors from 'cors';
 import express from 'express';
 const router = express.Router();
 import ItemsRepository from '../ItemsRepositoryORM.js';
+
+router.use(cors());
 
 router.get('/', async (req, res) => {
   try {
